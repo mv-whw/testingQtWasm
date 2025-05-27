@@ -1,0 +1,18 @@
+{
+    "classes": [
+        {
+            "className": "Uporabnik",
+            "lineNumber": 6,
+            "object": true,
+            "qualifiedClassName": "Uporabnik",
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QObject"
+                }
+            ]
+        }
+    ],
+    "inputFile": "uporabnik.h",
+    "outputRevision": 69
+}
