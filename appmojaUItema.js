@@ -903,9 +903,9 @@ function createExportWrapper(name, nargs) {
 // include: runtime_exceptions.js
 // end include: runtime_exceptions.js
 function findWasmBinary() {
-  var f = "appmojaUItema1.wasm";
-  if (!isDataURI(f)) {
-    return locateFile(f);
+  const wasmModule = await WebAssembly.instantiateStreaming(fetch("test0000.wasm"), importObject);
+  if (!isDataURI(wasmModule)) {
+    return locateFile(wasmModule);
   }
   return f;
 }
