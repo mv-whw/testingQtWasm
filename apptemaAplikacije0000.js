@@ -1,5 +1,5 @@
 
-var appmojaUItema_entry = (() => {
+var apptemaAplikacije_entry = (() => {
   var _scriptName = typeof document != 'undefined' ? document.currentScript?.src : undefined;
   if (typeof __filename != 'undefined') _scriptName = _scriptName || __filename;
   return (
@@ -903,9 +903,9 @@ function createExportWrapper(name, nargs) {
 // include: runtime_exceptions.js
 // end include: runtime_exceptions.js
 function findWasmBinary() {
-  const wasmModule = await WebAssembly.instantiateStreaming(fetch("test0000.wasm"), importObject);
-  if (!isDataURI(wasmModule)) {
-    return locateFile(wasmModule);
+  var f = "test0000.wasm";
+  if (!isDataURI(f)) {
+    return locateFile(f);
   }
   return f;
 }
@@ -15313,9 +15313,9 @@ var ___wasm_call_ctors = createExportWrapper("__wasm_call_ctors", 0);
 
 var _main = Module["_main"] = createExportWrapper("__main_argc_argv", 2);
 
-var _free = createExportWrapper("free", 1);
-
 var _fflush = createExportWrapper("fflush", 1);
+
+var _free = createExportWrapper("free", 1);
 
 var _malloc = createExportWrapper("malloc", 1);
 
@@ -16385,12 +16385,12 @@ for (const prop of Object.keys(Module)) {
 );
 })();
 if (typeof exports === 'object' && typeof module === 'object')
-  module.exports = appmojaUItema_entry;
+  module.exports = apptemaAplikacije_entry;
 else if (typeof define === 'function' && define['amd'])
-  define([], () => appmojaUItema_entry);
+  define([], () => apptemaAplikacije_entry);
 var isPthread = globalThis.self?.name?.startsWith('em-pthread');
 var isNode = typeof globalThis.process?.versions?.node == 'string';
 if (isNode) isPthread = require('worker_threads').workerData === 'em-pthread'
 
 // When running as a pthread, construct a new instance on startup
-isPthread && appmojaUItema_entry();
+isPthread && apptemaAplikacije_entry();
