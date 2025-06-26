@@ -98,7 +98,7 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
     // Wait for QWebChannel and call setPlatform on PlatformBridge
     new QWebChannel(qt.webChannelTransport, function(channel) {
         const platform = detectPlatform();
-        //console.log("Detected platform:", platform);
+        console.log("Detected platform:", platform);
         channel.objects.PlatformBridge.setPlatformName(platform);
     });
 </script>
