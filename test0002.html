@@ -84,23 +84,5 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
           });
         }
     </script>
-    <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
-    <script>
-    function detectPlatform() {
-        const ua = navigator.userAgent;
-        if(/Mobi|Android/i.test(ua))
-          return "Android";
-        else
-          if (/Mobi|iPhone/i.test(ua)) return "iPhone";
-        return "desktop";
-    }
-
-    // Wait for QWebChannel and call setPlatform on PlatformBridge
-    new QWebChannel(qt.webChannelTransport, function(channel) {
-        const platform = detectPlatform();
-        console.log("Detected platform:", platform);
-        channel.objects.PlatformBridge.setPlatformName(platform);
-    });
-</script>
   </body>
 </html>
