@@ -79,6 +79,26 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
     <script src="appdpAppHub.js"></script>
     <script type="text/javascript" src="qtloader.js"></script>
     <script>
+            const userAgent = window.navigator.userAgent;
+            const platform = window.navigator.platform;
+            const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
+            const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
+            const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+
+            if (macosPlatforms.includes(platform)) {
+              alert( 'Mac OS');
+            } else if (iosPlatforms.includes(platform)) {
+              alert('iOS');
+            } else if (windowsPlatforms.includes(platform)) {
+              alert('Windows');
+            } else if (/Android/.test(userAgent)) {
+              alert( 'Android');
+            } else if (/Linux/.test(platform)) {
+              alert( 'Linux');
+            }else
+              alert('Other');
+
+
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.register('service-worker.js').then(() => {
             if (!window.crossOriginIsolated) {
