@@ -48,29 +48,8 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
             try {
                 showUi(spinner);
-                //status.innerHTML = 'Loading...';
+                status.innerHTML = 'Loading...';
 
-                //detect os
-            const userAgent = window.navigator.userAgent;
-            const platform = window.navigator.platform;
-            const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
-            const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
-            const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
-
-            const osDetect=""
-            if (macosPlatforms.includes(platform)) {
-              osDetect= 'Mac OS';
-            } else if (iosPlatforms.includes(platform)) {
-              osDetect= 'iOS';
-            } else if (windowsPlatforms.includes(platform)) {
-              osDetect= 'Windows';
-            } else if (/Android/.test(userAgent)) {
-              osDetect='Android';
-            } else if (/Linux/.test(platform)) {
-              osDetect='Linux';
-            }else
-              osDetect='Unknown OS';
-              status.innerHTML = osDetect
 
                 const instance = await qtLoad({
                     qt: {
