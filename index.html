@@ -14,7 +14,7 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
         and Qt device independent pixels. -->
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=0"/>
 
-    <title>dpAppHub</title>
+    <title>N8n</title>
     <style>
       /* Make the html body cover the entire (visual) viewport with no scroll bars. */
       html, body { padding: 0; margin: 0; overflow: hidden; height: 100% }
@@ -25,7 +25,7 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
     <figure style="overflow:visible;" id="qtspinner">
       <center style="margin-top:1.5em; line-height:150%">
         <img src="qtlogo.svg" width="320" height="200" style="display:block"></img>
-        <strong>early dev channel fot dpAppHub</strong>
+        <strong>early dev channel for N8n</strong>
         <div id="qtstatus"></div>
         <noscript>JavaScript is disabled. Please enable JavaScript to use this application.</noscript>
       </center>
@@ -50,7 +50,6 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
                 showUi(spinner);
                 status.innerHTML = 'Loading...';
 
-
                 const instance = await qtLoad({
                     qt: {
                         onLoaded: () => showUi(screen),
@@ -63,7 +62,7 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
                                 exitData.text !== undefined ? ` (${exitData.text})` : '';
                             showUi(spinner);
                         },
-                        entryFunction: window.appdpAppHub_entry,
+                        entryFunction: window.appN8n_entry,
                         containerElements: [screen],
                         
                     }
@@ -72,11 +71,9 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
                 console.error(e);
                 console.error(e.stack);
             }
-
-
         }
     </script>
-    <script src="appdpAppHub.js"></script>
+    <script src="appN8n.js"></script>
     <script type="text/javascript" src="qtloader.js"></script>
     <script>
             /*const userAgent = window.navigator.userAgent;
