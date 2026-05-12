@@ -1638,6 +1638,14 @@ function ___cxa_begin_catch(ptr) {
   return ___cxa_get_exception_ptr(ptr);
 }
 
+function ___cxa_current_exception_type() {
+  if (!exceptionCaught.length) {
+    return 0;
+  }
+  var info = exceptionCaught[exceptionCaught.length - 1];
+  return info.get_type();
+}
+
 var exceptionLast = 0;
 
 var ___cxa_end_catch = () => {
@@ -13466,23 +13474,47 @@ function checkIncomingModuleAPI() {
 }
 
 var ASM_CONSTS = {
-  10735736: () => {
+  10946217: () => {
     Module.qtSuspendResumeControl = ({
       resume: null,
       asyncifyEnabled: false,
       eventHandlers: {},
-      pendingEvents: []
+      pendingEvents: [],
+      exclusiveEventHandler: 0
     });
   },
-  10735855: $0 => {
+  10946362: $0 => {
+    function createNamedFunction(name, parent, obj) {
+      return {
+        [name]: function(...args) {
+          return obj.call(parent, args);
+        }
+      }[name];
+    }
+    function deepShallowClone(obj) {
+      if (obj === null) return obj;
+      if (!(obj instanceof Event)) return obj;
+      const objCopy = {};
+      for (const key in obj) {
+        if (typeof obj[key] === "function") objCopy[key] = createNamedFunction(obj[key].name, obj, obj[key]); else objCopy[key] = obj[key];
+      }
+      objCopy["isInstanceOfEvent"] = true;
+      return objCopy;
+    }
     let index = $0;
     let control = Module.qtSuspendResumeControl;
     let handler = arg => {
+      arg = deepShallowClone(arg);
       control.pendingEvents.push({
         index,
         arg
       });
-      if (control.resume) {
+      if (control.exclusiveEventHandler > 0) {
+        if (index != control.exclusiveEventHandler) return;
+        const resume = control.resume;
+        control.resume = null;
+        resume();
+      } else if (control.resume) {
         const resume = control.resume;
         control.resume = null;
         resume();
@@ -13510,6 +13542,19 @@ function __asyncjs__qtSuspendJs() {
   }));
 }
 
+function getActiveElement_js(undefHandle) {
+  var activeEl = document.activeElement;
+  while (true) {
+    if (!activeEl) {
+      return undefHandle;
+    } else if (activeEl.shadowRoot) {
+      activeEl = activeEl.shadowRoot.activeElement;
+    } else {
+      return Emval.toHandle(activeEl);
+    }
+  }
+}
+
 var wasmImports;
 
 function assignWasmImports() {
@@ -13518,6 +13563,7 @@ function assignWasmImports() {
     /** @export */ __asyncjs__qtSuspendJs,
     /** @export */ __call_sighandler: ___call_sighandler,
     /** @export */ __cxa_begin_catch: ___cxa_begin_catch,
+    /** @export */ __cxa_current_exception_type: ___cxa_current_exception_type,
     /** @export */ __cxa_end_catch: ___cxa_end_catch,
     /** @export */ __cxa_find_matching_catch_2: ___cxa_find_matching_catch_2,
     /** @export */ __cxa_find_matching_catch_3: ___cxa_find_matching_catch_3,
@@ -13924,6 +13970,7 @@ function assignWasmImports() {
     /** @export */ fd_seek: _fd_seek,
     /** @export */ fd_sync: _fd_sync,
     /** @export */ fd_write: _fd_write,
+    /** @export */ getActiveElement_js,
     /** @export */ getaddrinfo: _getaddrinfo,
     /** @export */ invoke_dii,
     /** @export */ invoke_diii,
@@ -13961,10 +14008,10 @@ function assignWasmImports() {
     /** @export */ invoke_jiij,
     /** @export */ invoke_jiiji,
     /** @export */ invoke_jij,
-    /** @export */ invoke_jj,
     /** @export */ invoke_v,
     /** @export */ invoke_vdiiiiiii,
     /** @export */ invoke_vi,
+    /** @export */ invoke_vid,
     /** @export */ invoke_vidd,
     /** @export */ invoke_vidii,
     /** @export */ invoke_vii,
@@ -13993,7 +14040,6 @@ function assignWasmImports() {
     /** @export */ invoke_vijiii,
     /** @export */ invoke_vijj,
     /** @export */ invoke_vj,
-    /** @export */ invoke_vjiii,
     /** @export */ jsHaveAsyncify,
     /** @export */ jsHaveJspi,
     /** @export */ llvm_eh_typeid_for: _llvm_eh_typeid_for,
@@ -14179,29 +14225,6 @@ function invoke_viiiiii(index, a1, a2, a3, a4, a5, a6) {
   var sp = stackSave();
   try {
     getWasmTableEntry(index)(a1, a2, a3, a4, a5, a6);
-  } catch (e) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_jj(index, a1) {
-  var sp = stackSave();
-  try {
-    return getWasmTableEntry(index)(a1);
-  } catch (e) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    _setThrew(1, 0);
-    return 0n;
-  }
-}
-
-function invoke_vjiii(index, a1, a2, a3, a4) {
-  var sp = stackSave();
-  try {
-    getWasmTableEntry(index)(a1, a2, a3, a4);
   } catch (e) {
     stackRestore(sp);
     if (e !== e + 0) throw e;
@@ -14468,6 +14491,17 @@ function invoke_iiiiiiii(index, a1, a2, a3, a4, a5, a6, a7) {
   }
 }
 
+function invoke_iiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+  var sp = stackSave();
+  try {
+    return getWasmTableEntry(index)(a1, a2, a3, a4, a5, a6, a7, a8, a9);
+  } catch (e) {
+    stackRestore(sp);
+    if (e !== e + 0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
 function invoke_iiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8) {
   var sp = stackSave();
   try {
@@ -14483,6 +14517,17 @@ function invoke_iiiiiii(index, a1, a2, a3, a4, a5, a6) {
   var sp = stackSave();
   try {
     return getWasmTableEntry(index)(a1, a2, a3, a4, a5, a6);
+  } catch (e) {
+    stackRestore(sp);
+    if (e !== e + 0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_ij(index, a1) {
+  var sp = stackSave();
+  try {
+    return getWasmTableEntry(index)(a1);
   } catch (e) {
     stackRestore(sp);
     if (e !== e + 0) throw e;
@@ -14644,17 +14689,6 @@ function invoke_viiji(index, a1, a2, a3, a4) {
   }
 }
 
-function invoke_ij(index, a1) {
-  var sp = stackSave();
-  try {
-    return getWasmTableEntry(index)(a1);
-  } catch (e) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
 function invoke_iijii(index, a1, a2, a3, a4) {
   var sp = stackSave();
   try {
@@ -14715,6 +14749,17 @@ function invoke_viijj(index, a1, a2, a3, a4) {
   var sp = stackSave();
   try {
     getWasmTableEntry(index)(a1, a2, a3, a4);
+  } catch (e) {
+    stackRestore(sp);
+    if (e !== e + 0) throw e;
+    _setThrew(1, 0);
+  }
+}
+
+function invoke_vid(index, a1, a2) {
+  var sp = stackSave();
+  try {
+    getWasmTableEntry(index)(a1, a2);
   } catch (e) {
     stackRestore(sp);
     if (e !== e + 0) throw e;
@@ -14792,17 +14837,6 @@ function invoke_viif(index, a1, a2, a3) {
   var sp = stackSave();
   try {
     getWasmTableEntry(index)(a1, a2, a3);
-  } catch (e) {
-    stackRestore(sp);
-    if (e !== e + 0) throw e;
-    _setThrew(1, 0);
-  }
-}
-
-function invoke_iiiiiiiiii(index, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
-  var sp = stackSave();
-  try {
-    return getWasmTableEntry(index)(a1, a2, a3, a4, a5, a6, a7, a8, a9);
   } catch (e) {
     stackRestore(sp);
     if (e !== e + 0) throw e;
